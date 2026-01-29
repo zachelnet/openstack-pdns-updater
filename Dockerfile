@@ -1,5 +1,6 @@
 ARG UBUNTU_RELEASE=24.04
 FROM ubuntu:${UBUNTU_RELEASE}
+#FROM debian:stable-slim
 LABEL maintainer="SEEBURGER AG (https://github.com/seeburger-ag/openstack-pdns-updater)"
 
 USER root
@@ -11,19 +12,16 @@ ARG GROUP_ID=45000
 ENV USER_ID=${USER_ID}
 ENV GROUP_ID=${GROUP_ID}
 
-ENV LANG=en_US.UTF-8
-ENV LANGUAGE=en_US:en
-ENV LC_ALL=en_US.UTF-8
+ENV LANG=C.UTF-8
+ENV LC_ALL=C.UTF-8
 
 ENV OS_CACERT=/opt/openstack-pdns-updater/ca-certificates.crt
 ENV SKIP_DELETE=False
 
-RUN apt update && apt dist-upgrade -y --autoremove --purge
-RUN apt install -y git locales software-properties-common python3-pip libssl-dev python3-os-client-config python3-keystone python3-novaclient python3-kombu
-RUN apt clean
+#RUN apt update && apt install -y git software-properties-common python3-pip libssl-dev python3-os-client-config python3-keystone python3-novaclient python3-kombu && apt clean
+RUN apt update && apt install -y git python3-pip libssl-dev python3-os-client-config python3-keystone python3-novaclient python3-kombu && apt clean
 RUN groupadd -g $GROUP_ID dragon \
-    && useradd -g dragon -u $USER_ID -m -d /home/dragon dragon \
-    && locale-gen en_US.UTF-8
+    && useradd -g dragon -u $USER_ID -m -d /home/dragon dragon 
 RUN mkdir -p /opt/openstack-pdns-updater \
     && chown -R dragon: /opt/openstack-pdns-updater \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
