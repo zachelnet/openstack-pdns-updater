@@ -19,7 +19,14 @@ ENV OS_CACERT=/opt/openstack-pdns-updater/ca-certificates.crt
 ENV SKIP_DELETE=False
 
 #RUN apt update && apt install -y git software-properties-common python3-pip libssl-dev python3-os-client-config python3-keystone python3-novaclient python3-kombu && apt clean
-RUN apt update && apt install -y git python3-pip libssl-dev python3-os-client-config python3-keystone python3-novaclient python3-kombu && apt clean
+RUN apt update && apt install -y \ 
+    git python3-pip libssl-dev \
+    python3-os-client-config \
+    python3-keystone \
+    python3-novaclient \
+    python3-neutronclient \
+    python3-kombu \
+    && apt clean
 RUN groupadd -g $GROUP_ID dragon \
     && useradd -g dragon -u $USER_ID -m -d /home/dragon dragon 
 RUN mkdir -p /opt/openstack-pdns-updater \
